@@ -297,205 +297,231 @@ const remainingCount = todos.length - completedCount;
 
 
   return (
-    <>
-<div className="min-h-screen w-screen bg-sky-800 flex items-center justify-center px-4">
-  <div className="flex flex-col w-full max-w-3xl sm:h-[80vh] p-6 sm:p-10 bg-white shadow-inner rounded-2xl">
+<>
+  <div className="min-h-screen w-screen bg-sky-800 flex items-center justify-center px-4">
+    <div className="flex flex-col w-full max-w-3xl sm:h-[80vh] bg-white shadow-inner rounded-2xl p-4 sm:p-10 pt-8">
 
-          <header className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-3xl font-extrabold text-blue-800">
-                My Todo App
-              </h2>
-   <Typewriter
-  texts={[
-    "Every checkmark counts.",
-    "Tiny steps, big results.",
-    "Tasks today, triumphs tomorrow.",
-    "Make it happen, one task at a time.",
-    "Beat procrastination, delightfully."
-  ]}
-  speed={50}   // typing speed per character
-  delay={2000} // time before switching to next phrase
-  className="text-sm text-gray-500"
-/>
+      {/* HEADER */}
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-800">
+            My Todo App
+          </h2>
 
+          <Typewriter
+            texts={[
+              "Every checkmark counts.",
+              "Tiny steps, big results.",
+              "Tasks today, triumphs tomorrow.",
+              "Make it happen, one task at a time.",
+              "Beat procrastination, delightfully."
+            ]}
+            speed={50}
+            delay={2000}
+            className="text-sm text-gray-500 min-h-[1.25rem]"
+          />
+        </div>
 
-            </div>
-            <div className="text-sm text-gray-500">
-  <span className="font-medium text-gray-700">
-    {remainingCount}
-  </span>{" "}
-  remaining Tasks ·{" "}
-  <span className="font-medium text-green-600">
-    {completedCount}
-  </span>{" "}
-  completed Tasks
-</div>
+        <div className="text-sm text-gray-500">
+          <span className="font-medium text-gray-700">{remainingCount}</span>{" "}
+          remaining Tasks ·{" "}
+          <span className="font-medium text-green-600">{completedCount}</span>{" "}
+          completed Tasks
+        </div>
+      </header>
 
-          </header>
-
-          {/* INPUT */}
-   <div className="flex gap-3 mb-6 items-center">
+      {/* INPUT ROW */}
+{/* INPUT ROW */}
+<div className="flex items-center gap-2 mb-6">
   <input
     type="text"
     placeholder="Add a task (press Enter)"
     value={taskText}
     onChange={(e) => setTaskText(e.target.value)}
     onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-    className="flex-1 px-4 py-3 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
+    className="flex-1 px-4 py-3 rounded-lg border border-gray-200 shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-violet-300"
   />
 
-  {/* Add Button */}
-{/* Add Task Button */}
-<button
-  onClick={handleAdd}
-  className="flex items-center gap-2 px-4 py-3 rounded-lg bg-gray-200
-             hover:bg-gray-300 cursor-pointer transition-colors"
-  title="Add task"
->
-  <FaPlus size={18} />
-  <span className="text-sm font-medium">Add</span>
-</button>
+  <button
+    onClick={handleAdd}
+    className="flex items-center justify-center gap-2 px-4 py-3
+               rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
+  >
+    <FaPlus size={18} />
+    <span className="hidden sm:inline text-sm font-medium">Add</span>
+  </button>
 
-{/* Image Upload Button */}
-<label
-  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors ${
-    fileUploaded
-      ? "bg-green-200 hover:bg-green-300 cursor-pointer"
-      : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
-  }`}
-  title="Upload image"
->
-  <FaImage size={18} />
-  <span className="text-sm font-medium">{fileUploaded ? "File Uploaded" : "Upload"}</span>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => {
-      const selectedFile = e.target.files?.[0] || null;
-      setFile(selectedFile);
-      if (selectedFile) {
-        setFileUploaded(true);
-      }
-    }}
-    className="hidden"
-  />
-</label>
+  <label
+    className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg
+      transition-colors cursor-pointer ${
+        fileUploaded
+          ? "bg-green-200 hover:bg-green-300"
+          : "bg-gray-200 hover:bg-gray-300"
+      }`}
+  >
+    <FaImage size={18} />
+    <span className="hidden sm:inline text-sm font-medium">
+      {fileUploaded ? "File Uploaded" : "Upload"}
+    </span>
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => {
+  const selectedFile = e.target.files?.[0] || null;
 
+  if (selectedFile) {
+    setFile(selectedFile);
+    setFileUploaded(true);
+    toast.success("📸 Image selected successfully!");
+  } else {
+    setFile(null);
+    setFileUploaded(false);
+    toast.error("No image selected");
+  }
+}}
+
+      className="hidden"
+    />
+  </label>
 </div>
 
 
-          {/* TODO LIST */}
-          
-          <div className="flex-1 overflow-y-auto space-y-4 pr-12">
+      {/* TODO LIST */}
+      <div className="flex-1 overflow-y-auto space-y-4 pr-2 sm:pr-12">
+        {todos.length === 0 && (
+          <div className="h-full flex flex-col items-center justify-center text-gray-500">
+            <p className="mb-2">No todos yet</p>
+            <p className="text-xs">Add your first task to get started</p>
+          </div>
+        )}
 
-            {todos.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center text-gray-500">
-                <p className="mb-2">No todos yet</p>
-                <p className="text-xs">Add your first task to get started</p>
+        {todos.map((item) => (
+          <div
+            key={item.id}
+            className={`flex flex-col gap-2 p-4 rounded-lg border shadow-sm ${
+              item.is_completed
+                ? "bg-gray-50 border-gray-100 opacity-80"
+                : "bg-white border-gray-200"
+            }`}
+          >
+            {/* TODO ROW */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              
+              {/* LEFT SIDE */}
+              <div className="flex items-center gap-3 flex-1">
+                <label
+                  className="relative flex items-center cursor-pointer"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    type="checkbox"
+                    checked={item.is_completed}
+                    onChange={() =>
+                      handleToggle(item.id, item.is_completed)
+                    }
+                    className="sr-only peer"
+                  />
+                  <div
+                    className="w-6 h-6 rounded-full border-2 border-gray-300
+                               flex items-center justify-center transition-all
+                               peer-checked:border-blue-600
+                               peer-checked:bg-blue-600"
+                  >
+                    <svg
+                      className="w-4 h-4 text-white scale-0 peer-checked:scale-100 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                </label>
+
+                {editingId === item.id ? (
+                  <input
+                    value={editingText}
+                    onChange={(e) => setEditingText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveEdit(item.id);
+                      if (e.key === "Escape") setEditingId(null);
+                    }}
+                    autoFocus
+                    className="flex-1 px-2 py-1 border rounded-md
+                               focus:outline-none focus:ring-2 focus:ring-violet-300"
+                  />
+                ) : (
+                  <span
+                    className={`flex-1 break-words text-sm sm:text-base ${
+                      item.is_completed
+                        ? "line-through text-gray-400"
+                        : "text-gray-700"
+                    }`}
+                  >
+                    {item.task}
+                  </span>
+                )}
               </div>
-            )}
 
-            {todos.map((item) => (
-  <div
-    key={item.id}
-    className={`flex flex-col gap-2 p-4 rounded-lg border shadow-sm ${
-      item.is_completed ? "bg-gray-50 border-gray-100 opacity-80" : "bg-white border-gray-200"
-    }`}
-  >
-    {/* Row with checkbox, task text, and buttons */}
-    <div className="flex items-center justify-between gap-4">
-     <input
-  type="checkbox"
-  checked={item.is_completed}
-  onChange={() => handleToggle(item.id, item.is_completed)}
-  onClick={(e) => e.stopPropagation()}
-  className="h-5 w-5 rounded-full"
- />
+              {/* ACTION BUTTONS */}
+              <div className="flex flex-wrap sm:flex-nowrap gap-2 shrink-0 justify-end">
+                {editingId === item.id ? (
+                  <button
+                    onClick={() => handleSaveEdit(item.id)}
+                    className="px-3 h-9 rounded-lg bg-green-100 hover:bg-green-200 text-green-700"
+                  >
+                    <FiCheckCircle size={16} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleEdit(item.id, item.task)}
+                    className="px-3 h-9 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
+                  >
+                    <FiEdit2 size={16} />
+                  </button>
+                )}
 
-{editingId === item.id ? (
-  <input
-    value={editingText}
-    onChange={(e) => setEditingText(e.target.value)}
-    onKeyDown={(e) => {
-      if (e.key === "Enter") handleSaveEdit(item.id);
-      if (e.key === "Escape") setEditingId(null);
-    }}
-    autoFocus
-    className="flex-1 px-2 py-1 border rounded-md
-               focus:outline-none focus:ring-2 focus:ring-violet-300"
-  />
-) : (
-  <span
-    className={`flex-1 min-w-0 truncate ${
-      item.is_completed
-        ? "line-through text-gray-400"
-        : "text-gray-700"
-    }`}
-  >
-    {item.task}
-  </span>
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="px-3 h-9 rounded-lg bg-red-100 hover:bg-red-200 text-red-700"
+                >
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* IMAGE */}
+     {item.image_src && (
+  <div className="mt-2 flex items-center justify-center">
+    <img
+      src={item.image_src}
+      alt="todo"
+      className="w-full max-w-lg h-auto rounded-lg object-cover border border-gray-200 shadow-sm"
+      onError={() => {
+        handleImgError(item.id);
+        toast.error("⚠️ Failed to load image");
+      }}
+    />
+  </div>
 )}
 
 
-
-<div className="flex gap-2 shrink-0">
-  {editingId === item.id ? (
-    /* Save button */
-    <button
-      onClick={() => handleSaveEdit(item.id)}
-      className="flex items-center gap-1 px-3 h-9 rounded-lg bg-green-100
-                 hover:bg-green-200 text-green-700"
-      title="Save"
-    >
-      <FiCheckCircle size={16} />
-      <span className="text-sm font-medium">Save</span>
-    </button>
-  ) : (
-    /* Edit button */
-    <button
-      onClick={() => handleEdit(item.id, item.task)}
-      className="flex items-center gap-1 px-3 h-9 rounded-lg bg-indigo-100
-                 hover:bg-indigo-200 text-indigo-700"
-      title="Edit"
-    >
-      <FiEdit2 size={16} />
-      <span className="text-sm font-medium">Edit</span>
-    </button>
-  )}
-
-  {/* Delete button */}
-  <button
-    onClick={() => handleDelete(item.id)}
-    className="flex items-center gap-1 px-3 h-9 rounded-lg bg-red-100
-               hover:bg-red-200 text-red-700"
-    title="Delete"
-  >
-    <FiTrash2 size={16} />
-    <span className="text-sm font-medium">Delete</span>
-  </button>
-</div>
-
-
-
-
-    </div>
-
-    {/* Image (optional) */}
-    {item.image_src && (
-      <div className="mt-2 flex items-center gap-3">
-        <img src={item.image_src} alt="todo" className="w-16 h-16 rounded-lg object-cover" onError={() => handleImgError(item.id)} />
-      </div>
-    )}
-  </div>
-))}
-
           </div>
-        </div>
+        ))}
       </div>
+    </div>
+  </div>
 
-      <ToastContainer position="top-center" autoClose={3000} />
-    </>
+  <ToastContainer position="top-center" autoClose={3000} />
+</>
+
+
   );
 }
 
