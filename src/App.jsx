@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
-import HeroSection from "./components/Herosection";
 import Todo from "./components/todo";
-import "./App.css";
+import "./index.css";
 
 function App() {
-  
   return (
     <>
-    
-    <Todo />
+      <Todo />
     </>
   );
 }

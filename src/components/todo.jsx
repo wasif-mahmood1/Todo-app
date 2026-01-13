@@ -16,8 +16,8 @@ const [editingText, setEditingText] = useState("");
   const [file, setFile] = useState(null);
   const [fileUploaded, setFileUploaded] = useState(false);
 
-  const API_BASE = import.meta.env.VITE_API_URL;
- // const API_BASE =  "http://Todo-app-env.eba-sbk2avzz.eu-north-1.elasticbeanstalk.com";
+
+ const API_BASE =  "http://Todo-app-env.eba-sbk2avzz.eu-north-1.elasticbeanstalk.com";
 
   useEffect(() => {
     console.log("🔍 App initialized");
